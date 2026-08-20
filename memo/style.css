@@ -167,40 +167,59 @@ mark {
 }
 
 .months {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding: 0 14px 12px;
-  scrollbar-width: none;
   max-height: 0;
   opacity: 0;
+  overflow: hidden;
+  padding: 0 16px;
   transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
 }
 .months.open {
-  max-height: 46px;
+  max-height: 260px;
   opacity: 1;
+  padding: 0 16px 14px;
+  overflow-y: auto;
 }
-.months::-webkit-scrollbar { display: none; }
+.years-view,
+.myview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.year-pill,
 .month-pill {
-  flex-shrink: 0;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
   color: #6f6d67;
   background: #fff;
   border: 1px solid var(--border);
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 999px;
   cursor: pointer;
   transition: all .15s ease;
   font-variant-numeric: tabular-nums;
 }
+.year-pill:hover,
 .month-pill:hover { background: #f5f4f0; }
+.year-pill.active,
 .month-pill.active {
   color: #fff;
   background: var(--ink);
   border-color: var(--ink);
   font-weight: 700;
 }
+.year-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 800;
+  padding: 4px 2px 10px;
+  cursor: pointer;
+}
+.year-back svg { width: 16px; height: 16px; }
 
 /* ---------- month nav ---------- */
 .month-nav {

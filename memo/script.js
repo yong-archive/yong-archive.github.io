@@ -2,6 +2,11 @@
   "use strict";
 
   var monthsEl = document.getElementById("months");
+  var yearsViewEl = document.getElementById("yearsView");
+  var monthsOfYearViewEl = document.getElementById("monthsOfYearView");
+  var yearBackBtn = document.getElementById("yearBackBtn");
+  var yearBackLabel = document.getElementById("yearBackLabel");
+  var monthOfYearListEl = document.getElementById("monthOfYearList");
   var feedEl = document.getElementById("feed");
   var feedInnerEl = document.getElementById("feedInner");
   var menuToggle = document.getElementById("menuToggle");
@@ -30,6 +35,7 @@
   var currentIndex = 0;
   var searchMode = false;
   var searchQuery = "";
+  var currentYear = null;
 
   /* ================= deleted posts (local, per-browser) ================= */
   var DELETE_STORAGE_KEY = "yongMemoDeleted";
@@ -187,13 +193,48 @@
     }
   }
 
-  /* ================= build month pills ================= */
-  function buildMonthPills() {
+  /* ================= build year / month picker ================= */
+  function getYears() {
+    var seen = {};
+    var years = [];
+    MEMO_MONTHS.forEach(function (key) {
+      var y = key.split("-")[0];
+      if (!seen[y]) {
+        seen[y] = true;
+        years.push(y);
+      }
+    });
+    return years;
+  }
+
+  function buildYearsView() {
+    yearsViewEl.innerHTML = "";
+    var frag = document.createDocumentFragment();
+    getYears().forEach(function (y) {
+      var pill = document.createElement("button");
+      pill.className = "year-pill";
+      pill.textContent = y + "년";
+      pill.dataset.year = y;
+      pill.addEventListener("click", function () {
+        showMonthsOfYear(y);
+      });
+      frag.appendChild(pill);
+    });
+    yearsViewEl.appendChild(frag);
+  }
+
+  function showMonthsOfYear(year) {
+    currentYear = year;
+    yearBackLabel.textContent = year + "년";
+
+    monthPillEls = {};
+    monthOfYearListEl.innerHTML = "";
     var frag = document.createDocumentFragment();
     MEMO_MONTHS.forEach(function (key, idx) {
+      if (key.split("-")[0] !== year) return;
       var pill = document.createElement("button");
       pill.className = "month-pill";
-      pill.textContent = formatMonthPill(key);
+      pill.textContent = parseInt(key.split("-")[1], 10) + "월";
       pill.dataset.month = key;
       pill.addEventListener("click", function () {
         goToIndex(idx);
@@ -202,10 +243,25 @@
       monthPillEls[key] = pill;
       frag.appendChild(pill);
     });
-    monthsEl.appendChild(frag);
+    monthOfYearListEl.appendChild(frag);
+
+    yearsViewEl.hidden = true;
+    monthsOfYearViewEl.hidden = false;
+    setActivePill(MEMO_MONTHS[currentIndex]);
+  }
+
+  function showYearsView() {
+    currentYear = null;
+    monthsOfYearViewEl.hidden = true;
+    yearsViewEl.hidden = false;
   }
 
   function setActivePill(key) {
+    var y = key ? key.split("-")[0] : null;
+    var yearPills = yearsViewEl.querySelectorAll(".year-pill");
+    yearPills.forEach(function (p) {
+      p.classList.toggle("active", p.dataset.year === y);
+    });
     Object.keys(monthPillEls).forEach(function (k) {
       var active = k === key;
       monthPillEls[k].classList.toggle("active", active);
@@ -406,12 +462,17 @@
     }
     loadDeleted();
     updateTrashBadge();
-    buildMonthPills();
+    buildYearsView();
     renderMonth(MEMO_MONTHS.length - 1);
 
     menuToggle.addEventListener("click", function () {
-      monthsEl.classList.toggle("open");
+      var open = monthsEl.classList.toggle("open");
+      if (open) {
+        showMonthsOfYear(MEMO_MONTHS[currentIndex].split("-")[0]);
+      }
     });
+
+    yearBackBtn.addEventListener("click", showYearsView);
 
     prevBtn.addEventListener("click", function () {
       goToIndex(currentIndex - 1);

@@ -37,7 +37,16 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <nav class="months" id="months" aria-label="월 선택"></nav>
+    <nav class="months" id="months" aria-label="년/월 선택">
+      <div class="years-view" id="yearsView"></div>
+      <div class="myview" id="monthsOfYearView" hidden>
+        <button class="year-back" id="yearBackBtn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="yearBackLabel"></span>
+        </button>
+        <div class="myview-list" id="monthOfYearList"></div>
+      </div>
+    </nav>
   </header>
 
   <div class="month-nav">
