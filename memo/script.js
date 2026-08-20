@@ -7,7 +7,8 @@
   var menuToggle = document.getElementById("menuToggle");
   var jumpBtn = document.getElementById("jumpBtn");
 
-  var AVATAR_SRC = "../assets/profile.jpg";
+  var AVATAR_SRC = "../assets/memo-profile.png";
+  var AVATAR_FALLBACK = "../assets/memo-profile.jpg";
   var POST_NAME = "SOLAR";
 
   var monthDividerEls = {};
@@ -110,6 +111,10 @@
     img.src = AVATAR_SRC;
     img.alt = POST_NAME;
     img.loading = "lazy";
+    img.onerror = function () {
+      img.onerror = null;
+      img.src = AVATAR_FALLBACK;
+    };
     avatar.appendChild(img);
 
     var who = document.createElement("div");
