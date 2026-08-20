@@ -27,8 +27,8 @@
   var trashRestoreAll = document.getElementById("trashRestoreAll");
   var trashListEl = document.getElementById("trashList");
 
-  var AVATAR_SRC = "../assets/memo-profile.png";
-  var AVATAR_FALLBACK = "../assets/memo-profile.jpg";
+  var AVATAR_SRC = "assets/memo-profile.jpg";
+  var AVATAR_FALLBACK = "assets/memo-profile.jpg";
   var POST_NAME = "SOLAR";
 
   var monthPillEls = {};
