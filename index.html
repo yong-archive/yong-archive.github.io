@@ -46,13 +46,15 @@
     overflow-y:auto;
   }
 
-  /* keep the card look on small screens too, just tighten the margins */
+  /* near full-bleed on small/mobile screens, just a touch smaller */
   @media (max-width:480px){
-    body{padding:20px 12px;}
+    body{padding:10px;align-items:flex-start;}
     .app{
-      border-radius:20px;
-      max-height:calc(100vh - 40px);
-      max-height:calc(100dvh - 40px);
+      border-radius:14px;
+      box-shadow:none;
+      max-height:none;
+      min-height:calc(100vh - 20px);
+      min-height:calc(100dvh - 20px);
     }
   }
 
@@ -190,7 +192,7 @@
   <div class="hero">
     <div class="avatar"><img src="./assets/profile.jpg" alt="솔라"></div>
     <div class="label">Solar Archive</div>
-    <p>솔라가 남긴 메시지들을<br>이곳에 모아두었어요.</p>
+    <p>버블과 프롬으로 남긴 메시지들을<br>이곳에 모아두었어요.</p>
   </div>
 
   <div class="section-divider"></div>
@@ -202,7 +204,6 @@
       <div class="convo-body">
         <div class="convo-top">
           <span class="convo-name">Bubble Archive</span>
-          <span class="convo-time">열어보기</span>
         </div>
         <div class="convo-preview">그동안의 버블 메시지 모아보기 ›</div>
       </div>
@@ -214,7 +215,6 @@
       <div class="convo-body">
         <div class="convo-top">
           <span class="convo-name">FROMM Archive</span>
-          <span class="convo-time">열어보기</span>
         </div>
         <div class="convo-preview">프롬에서 보낸 편지들 모아보기 ›</div>
       </div>
@@ -226,7 +226,6 @@
       <div class="convo-body">
         <div class="convo-top">
           <span class="convo-name">용줄메모</span>
-          <span class="convo-time">열어보기</span>
         </div>
         <div class="convo-preview">한줄메모에 남긴 용이만의 글 모아보기 ›</div>
       </div>
