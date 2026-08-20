@@ -178,7 +178,7 @@
 
   /* ================= init ================= */
   function init() {
-    if (!window.MEMO_MONTHS || !MEMO_MONTHS.length) {
+    if (typeof MEMO_MONTHS === "undefined" || !MEMO_MONTHS.length) {
       feedInnerEl.innerHTML = '<div class="empty">아직 정리된 메모가 없어요.</div>';
       return;
     }
