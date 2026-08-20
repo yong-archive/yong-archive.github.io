@@ -357,6 +357,7 @@ mark {
   align-items: flex-end;
   justify-content: center;
 }
+.trash-overlay[hidden] { display: none; }
 .trash-panel {
   width: 100%;
   max-width: 480px;
