@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>용뚠, · FROMM Archive</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.css" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="pwGate" class="pw-gate">
+  <div class="pw-lock">🔒</div>
+  <div class="pw-title">비밀번호를 입력하세요</div>
+  <input id="pwInput" type="password" inputmode="numeric" placeholder="비밀번호" class="pw-input">
+  <button id="pwSubmit" class="pw-submit">확인</button>
+  <div id="pwError" class="pw-error">비밀번호가 틀렸습니다</div>
+</div>
+
+<div class="app">
+
+  <div class="landing" id="landing">
+    <div class="landing-bg">
+      <img class="landing-bg-img" id="landingBgImg" src="assets/landing-bg.jpg" alt="">
+      <div class="landing-bg-fallback"></div>
+      <div class="landing-bg-shade"></div>
+    </div>
+
+    <div class="landing-top">
+      <button class="landing-icon-btn" title="닫기">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="landing-top-right"></div>
+    </div>
+
+    <div class="landing-dday">
+      <div class="landing-dday-label">프롬친구와 함께한 날</div>
+      <div class="landing-dday-count">❤️ <span id="landingDdayNum">+0</span></div>
+    </div>
+
+    <div class="landing-bottom">
+      <div class="landing-avatar">
+        <img id="landingAvatarImg" src="assets/profile.jpg" alt="">
+        <div class="landing-avatar-fallback" id="landingAvatarFallback"></div>
+      </div>
+      <div class="landing-name" id="landingName">용뚠,</div>
+      <div class="landing-sub" id="landingSub">혼또니 씨에씨에🐾</div>
+      <button class="landing-cta" id="landingCta">1:1 대화하기</button>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="back" title="뒤로" id="chatBackBtn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="peer">
+        <h1>용뚠,</h1>
+      </div>
+      <div class="icons">
+        <button id="searchToggle" title="검색"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button title="메뉴"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+    <div class="nav-strip">
+      <nav class="months" id="months" aria-label="월 선택"></nav>
+      <nav class="days" id="days" aria-label="날짜 바로가기"></nav>
+    </div>
+  </header>
+
+  <main class="chat" id="chat">
+    <div class="chat-inner" id="chatInner"></div>
+    <button class="jump" id="jumpBtn" title="최신 메시지로">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </main>
+
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-bar">
+      <button class="search-back" id="searchClose" title="닫기">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <input id="searchInput" class="search-input" type="text" placeholder="대화 내용 검색" autocomplete="off">
+      <button class="search-clear" id="searchClear" title="지우기" hidden>
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15"/><path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
