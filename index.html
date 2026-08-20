@@ -107,6 +107,11 @@
     width:66%; height:auto;
     object-fit:contain;
   }
+  .icon-memo{background:#fff; box-shadow:0 0 0 1px var(--line);}
+  .icon-memo img{
+    width:100%; height:100%;
+    object-fit:cover;
+  }
 
   .convo-body{flex:1;min-width:0;}
   .convo-top{
@@ -181,6 +186,18 @@
           <span class="convo-time">열어보기</span>
         </div>
         <div class="convo-preview">프롬에서 보낸 편지들 모아보기 ›</div>
+      </div>
+      <span class="convo-badge"></span>
+    </a>
+
+    <a class="convo" href="./memo/">
+      <div class="convo-icon icon-memo"><img src="./assets/profile.jpg" alt="용줄메모"></div>
+      <div class="convo-body">
+        <div class="convo-top">
+          <span class="convo-name">용줄메모</span>
+          <span class="convo-time">열어보기</span>
+        </div>
+        <div class="convo-preview">한줄메모에 남긴 용이만의 글 모아보기 ›</div>
       </div>
       <span class="convo-badge"></span>
     </a>
