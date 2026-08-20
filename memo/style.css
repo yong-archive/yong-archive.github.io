@@ -26,6 +26,8 @@ html, body {
   margin: 0;
   padding: 0;
   background: var(--room-bg);
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -37,10 +39,13 @@ body {
 .app {
   max-width: 480px;
   margin: 0 auto;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
   background: var(--room-bg);
   position: relative;
+  overflow: hidden;
 }
 
 /* ---------- top bar ---------- */
@@ -262,7 +267,7 @@ mark {
 }
 
 /* ---------- feed ---------- */
-.feed { padding-bottom: 60px; background: var(--room-bg); }
+.feed { flex: 1; overflow-y: auto; padding-bottom: 60px; background: var(--room-bg); }
 .feed-inner { display: flex; flex-direction: column; }
 
 .post {
