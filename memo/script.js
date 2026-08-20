@@ -114,7 +114,7 @@
 
       var snippet = document.createElement("div");
       snippet.className = "trash-row-snippet";
-      snippet.textContent = (item.m || "").slice(0, 60);
+      snippet.textContent = decodeEntities(item.m || "").slice(0, 60);
 
       var info = document.createElement("div");
       info.className = "trash-row-info";
@@ -152,7 +152,7 @@
   function copyDeletedList() {
     var items = Object.keys(deletedMap).map(function (id) { return deletedMap[id]; });
     var lines = items.map(function (item) {
-      return item.d + " " + item.t + " | " + (item.m || "").replace(/\n/g, " ").slice(0, 80);
+      return item.d + " " + item.t + " | " + decodeEntities(item.m || "").replace(/\n/g, " ").slice(0, 80);
     });
     var text = lines.join("\n") || "(삭제한 글이 없어요)";
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -185,6 +185,21 @@
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
+  }
+
+  function decodeEntities(s) {
+    return s
+      .replace(/&#(\d+);/g, function (_, dec) {
+        return String.fromCodePoint(parseInt(dec, 10));
+      })
+      .replace(/&#x([0-9a-fA-F]+);/g, function (_, hex) {
+        return String.fromCodePoint(parseInt(hex, 16));
+      })
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, "\"")
+      .replace(/&#39;|&apos;/g, "'");
   }
 
   function emojify(el) {
@@ -332,7 +347,7 @@
     if (p.m && p.m.trim()) {
       var body = document.createElement("div");
       body.className = "post-body";
-      body.innerHTML = highlightText(escapeHtml(p.m), query);
+      body.innerHTML = highlightText(escapeHtml(decodeEntities(p.m)), query);
       post.appendChild(body);
     }
 
