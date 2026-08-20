@@ -1,6 +1,8 @@
 :root {
   --page-bg: #fafaf9;
+  --room-bg: #e8e6e0;
   --bar-bg: #ffffff;
+  --card-bg: #ffffff;
   --border: #eceae5;
   --ink: #201e1b;
   --sub: #a3a19b;
@@ -23,7 +25,7 @@ img.emoji {
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--page-bg);
+  background: var(--room-bg);
 }
 
 body {
@@ -37,7 +39,7 @@ body {
   margin: 0 auto;
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--page-bg);
+  background: var(--room-bg);
   position: relative;
 }
 
@@ -263,11 +265,12 @@ mark {
 }
 
 /* ---------- feed ---------- */
-.feed { padding-bottom: 60px; }
+.feed { padding-bottom: 60px; background: var(--room-bg); }
 .feed-inner { display: flex; flex-direction: column; }
 
 .post {
   padding: 22px 24px;
+  background: var(--card-bg);
   border-bottom: 1px solid var(--border);
   position: relative;
 }
