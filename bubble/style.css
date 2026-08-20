@@ -76,6 +76,7 @@ body {
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
+  text-decoration: none;
 }
 .back svg { width: 22px; height: 22px; }
 .peer {
