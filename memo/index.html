@@ -19,20 +19,59 @@
       <div class="peer">
         <h1>용줄메모</h1>
       </div>
+      <button class="menu-btn" id="searchToggle" title="검색">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="menu-btn" id="trashToggle" title="삭제한 글 관리">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v13a1 1 0 01-1 1H8a1 1 0 01-1-1V7h10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="trash-badge" id="trashBadge" hidden>0</span>
+      </button>
       <button class="menu-btn" id="menuToggle" title="월별 이동">
         <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="search-bar" id="searchBar">
+      <svg viewBox="0 0 24 24" fill="none" class="search-bar-icon"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <input type="text" id="searchInput" placeholder="메모 내용 검색" autocomplete="off">
+      <button class="search-clear" id="searchClear" title="지우기">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
     </div>
     <nav class="months" id="months" aria-label="월 선택"></nav>
   </header>
 
+  <div class="month-nav">
+    <button class="month-nav-btn" id="prevMonth" title="이전 달">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="month-label" id="monthLabel"></div>
+    <button class="month-nav-btn" id="nextMonth" title="다음 달">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="search-status" id="searchStatus"></div>
+
   <main class="feed" id="feed">
     <div class="feed-inner" id="feedInner"></div>
   </main>
 
-  <button class="jump" id="jumpBtn" title="맨 위로">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
+  <div class="trash-overlay" id="trashOverlay" hidden>
+    <div class="trash-panel">
+      <div class="trash-head">
+        <h2>삭제한 글</h2>
+        <button class="trash-close" id="trashClose" title="닫기">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="trash-desc">여기서 지운 글은 이 기기·브라우저에서만 안 보이는 상태예요. 데이터 파일에서 완전히 지우려면 아래 목록을 복사해서 저에게 보내주세요.</p>
+      <div class="trash-actions">
+        <button class="trash-action-btn" id="trashCopy">목록 복사</button>
+        <button class="trash-action-btn" id="trashRestoreAll">전체 복원</button>
+      </div>
+      <div class="trash-list" id="trashList"></div>
+    </div>
+  </div>
 
 </div>
 
