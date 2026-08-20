@@ -478,7 +478,7 @@
     loadDeleted();
     updateTrashBadge();
     buildYearsView();
-    renderMonth(MEMO_MONTHS.length - 1);
+    renderMonth(0);
 
     menuToggle.addEventListener("click", function () {
       var open = monthsEl.classList.toggle("open");
