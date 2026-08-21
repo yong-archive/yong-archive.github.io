@@ -154,7 +154,7 @@ body {
 .search-status {
   display: none;
   padding: 12px 24px 0;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--sub);
 }
