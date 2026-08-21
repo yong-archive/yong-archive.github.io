@@ -19,8 +19,8 @@
   var searchClear = document.getElementById("searchClear");
   var searchStatusEl = document.getElementById("searchStatus");
 
-  var AVATAR_SRC = "../assets/memo-profile.png";
-  var AVATAR_FALLBACK = "../assets/profile.jpg";
+  var AVATAR_SRC = "assets/memo-profile.jpg";
+  var AVATAR_FALLBACK = "assets/memo-profile.jpg";
   var POST_NAME = "SOLAR";
 
   var monthPillEls = {};
