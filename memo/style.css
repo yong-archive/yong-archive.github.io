@@ -1,12 +1,12 @@
 :root {
   --page-bg: #ffffff;
-  --room-bg: #ffffff;
-  --bar-bg: #ff5b7a;
+  --room-bg: #ffeef2;
+  --bar-bg: #ed3e49;
   --card-bg: #ffffff;
   --border: #dfe3e6;
   --ink: #201e1b;
   --sub: #a3a19b;
-  --accent: #ff5b7a;
+  --accent: #ed3e49;
   --accent-soft: #ffe7ec;
   --avatar-bg: #f3f0eb;
   font-size: 16px;
