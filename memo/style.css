@@ -1,6 +1,6 @@
 :root {
   --page-bg: #ffffff;
-  --room-bg: #ffffff;
+  --room-bg: #ffeef2;
   --bar-bg: #ff5b7a;
   --card-bg: #ffffff;
   --border: #dfe3e6;
@@ -172,6 +172,7 @@ mark {
   opacity: 0;
   overflow: hidden;
   padding: 0 16px;
+  background: #ffffff;
   transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
 }
 .months.open {
@@ -207,9 +208,9 @@ mark {
 .month-pill {
   font-size: 12.5px;
   font-weight: 600;
-  color: #6f6d67;
-  background: #fff;
-  border: 1px solid var(--border);
+  color: #ffffff;
+  background: var(--accent);
+  border: none;
   padding: 7px 14px;
   border-radius: 999px;
   cursor: pointer;
@@ -217,7 +218,7 @@ mark {
   font-variant-numeric: tabular-nums;
 }
 .year-pill:hover,
-.month-pill:hover { background: #f5f4f0; }
+.month-pill:hover { background: #ff3f63; }
 .year-pill.active,
 .month-pill.active {
   color: #fff;
