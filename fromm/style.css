@@ -61,7 +61,8 @@ body {
   background: var(--topbar-bg);
 }
 .topbar-inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 10px;
   padding: 16px 14px 12px;
@@ -75,13 +76,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  justify-self: start;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
 }
 .back svg { width: 23px; height: 23px; }
 .peer {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,6 +103,7 @@ body {
   gap: 16px;
   color: var(--topbar-text);
   flex-shrink: 0;
+  justify-self: end;
 }
 .icons svg { width: 21px; height: 21px; }
 .icons button {
