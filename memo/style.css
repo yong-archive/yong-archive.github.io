@@ -1,9 +1,9 @@
 :root {
-  --page-bg: #fff5f7;
+  --page-bg: #ffffff;
   --room-bg: #ffeef2;
-  --bar-bg: #ffffff;
+  --bar-bg: #ff5b7a;
   --card-bg: #ffffff;
-  --border: #ffdee6;
+  --border: #dfe3e6;
   --ink: #201e1b;
   --sub: #a3a19b;
   --accent: #ff5b7a;
@@ -25,7 +25,7 @@ img.emoji {
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--room-bg);
+  background: var(--page-bg);
   height: 100%;
   overflow: hidden;
 }
@@ -44,6 +44,7 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--room-bg);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 8px 40px rgba(0,0,0,0.18);
   position: relative;
   overflow: hidden;
 }
@@ -74,7 +75,7 @@ body {
   height: 28px;
   border: none;
   background: none;
-  color: var(--ink);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +98,7 @@ body {
   margin: 0;
   font-size: 18px;
   font-weight: 800;
-  color: var(--ink);
+  color: #ffffff;
   letter-spacing: -.01em;
 }
 
@@ -242,9 +243,9 @@ mark {
 .month-nav-btn {
   width: 32px; height: 32px;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--ink);
+  border: none;
+  background: var(--accent);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
