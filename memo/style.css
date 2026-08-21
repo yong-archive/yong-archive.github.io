@@ -1,9 +1,9 @@
 :root {
-  --page-bg: #fafaf9;
-  --room-bg: #e8e6e0;
+  --page-bg: #fff5f7;
+  --room-bg: #ffeef2;
   --bar-bg: #ffffff;
   --card-bg: #ffffff;
-  --border: #eceae5;
+  --border: #ffdee6;
   --ink: #201e1b;
   --sub: #a3a19b;
   --accent: #ff5b7a;
@@ -329,4 +329,3 @@ mark {
   color: var(--sub);
   font-size: 13px;
 }
-
