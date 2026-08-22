@@ -1,17 +1,17 @@
 :root {
   --page-bg: #ffffff;
-  --chat-bg: #b6c2cc;
+  --chat-bg: #ffffff;
   --topbar-bg: #ffffff;
   --topbar-text: #262626;
   --border: #dfe3e6;
-  --bubble-bg: #ffffff;
+  --bubble-bg: #f3f3f5;
   --text-main: #202020;
   --text-sub: #4a5560;
   --text-sub-soft: #5c6b77;
   --name-color: #46525c;
   --accent: #fee500;
   --accent-text: #3c1e1e;
-  --input-bg: #f4f2ee;
+  --input-bg: #f3f3f5;
   --input-text: #9aa2a8;
   font-size: 16px;
 }
@@ -205,11 +205,11 @@ body {
   margin: 16px 0 14px;
   font-size: 11px;
   font-weight: 600;
-  color: #ffffff;
+  color: #8f959a;
 }
 .day-divider:first-child { margin-top: 4px; }
 .day-divider span {
-  background: rgba(0,0,0,0.18);
+  background: #f1f2f3;
   padding: 4px 12px;
   border-radius: 999px;
 }
@@ -369,7 +369,7 @@ body {
 
 .empty-state {
   text-align: center;
-  color: #ffffff;
+  color: #9aa1a6;
   font-size: 13px;
   padding: 60px 20px;
   opacity: 0.85;
