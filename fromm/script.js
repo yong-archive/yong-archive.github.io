@@ -35,15 +35,14 @@
   var PEER_NAME = "용뚠,";
   var PEER_INITIAL = "용";
 
-  // 삼선 메뉴 > 프로필 사진첩에 보여줄 사진 목록.
-  // (채팅에 쓰이는 assets/profile.jpg와는 별개로, 지금까지 올라온 프로필 사진들을
-  // profile_1, profile_2 ... 순서로 profile/ 폴더에 누적 보관합니다.
-  // 새 사진을 추가하면 이 배열 끝에 파일명만 추가하면 됩니다.)
-  var PROFILE_PHOTOS = [
-    "profile/profile_1.jpg",
-    "profile/profile_2.png",
-    "profile/profile_3.png"
-  ];
+  // 삼선 메뉴 > 프로필 사진첩에 보여줄 사진들.
+  // profile/ 폴더에 profile_1, profile_2, profile_3 ... 순서로 파일만 올려두면
+  // 아래 자동 탐색 로직이 알아서 찾아서 보여줍니다. 배열을 직접 수정할 필요 없음.
+  var PROFILE_PHOTO_PREFIX = "profile/profile_";
+  var PROFILE_PHOTO_EXTS = ["png", "jpg", "jpeg"];
+  var PROFILE_PHOTO_MAX_GAP = 3; // 번호가 이만큼 연속으로 비면 탐색 중단
+  var PROFILE_PHOTO_MAX_COUNT = 300; // 안전장치용 상한
+  var profilePhotosCache = null; // 탐색 결과 캐시 (배열)
 
   var WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
   var currentMonthKey = null;
@@ -568,40 +567,96 @@
     profileBodyEl.appendChild(wrap);
   }
 
-  // 프로필 탭: PROFILE_PHOTOS 배열의 사진들
-  function renderProfileTab() {
-    if (!PROFILE_PHOTOS.length) {
-      renderEmptyState("프로필 사진이 없어요.", "지금까지 사용했던 프로필 사진을\n모아보고, 간편하게 관리하세요.");
-      return;
+  // profile_N 한 장에 대해 등록된 확장자들을 순서대로 시도해서 존재하는 경로를 찾음
+  function probeProfilePhoto(n) {
+    return new Promise(function (resolve) {
+      var i = 0;
+      function attempt() {
+        if (i >= PROFILE_PHOTO_EXTS.length) { resolve(null); return; }
+        var path = PROFILE_PHOTO_PREFIX + n + "." + PROFILE_PHOTO_EXTS[i];
+        var img = new Image();
+        img.onload = function () { resolve(path); };
+        img.onerror = function () { i++; attempt(); };
+        img.src = path;
+      }
+      attempt();
+    });
+  }
+
+  // profile_1, profile_2 ... 순서로 존재하는 파일들을 끝까지 자동 탐색
+  function discoverProfilePhotos() {
+    if (profilePhotosCache) return Promise.resolve(profilePhotosCache);
+    var found = [];
+    var n = 1;
+    var gap = 0;
+
+    function step() {
+      if (gap >= PROFILE_PHOTO_MAX_GAP || n > PROFILE_PHOTO_MAX_COUNT) {
+        profilePhotosCache = found;
+        return Promise.resolve(found);
+      }
+      return probeProfilePhoto(n).then(function (path) {
+        if (path) {
+          found.push(path);
+          gap = 0;
+        } else {
+          gap++;
+        }
+        n++;
+        return step();
+      });
     }
 
-    var grid = document.createElement("div");
-    grid.className = "profile-grid";
+    return step();
+  }
 
-    PROFILE_PHOTOS.forEach(function (src, i) {
-      var item = document.createElement("div");
-      item.className = "profile-item";
-
-      var img = document.createElement("img");
-      img.src = src;
-      img.alt = "프로필 사진 " + (i + 1);
-      img.loading = "lazy";
-      img.onerror = function () { item.remove(); };
-      item.appendChild(img);
-
-      var dl = document.createElement("a");
-      dl.className = "profile-download";
-      dl.href = src;
-      dl.download = fileNameFromPath(src);
-      dl.title = "다운로드";
-      dl.innerHTML = downloadIconSvg();
-      item.appendChild(dl);
-
-      grid.appendChild(item);
-    });
-
+  // 프로필 탭: profile/ 폴더에서 자동으로 찾은 사진들
+  function renderProfileTab() {
+    var requestedTab = currentGalleryTab;
     profileBodyEl.innerHTML = "";
-    profileBodyEl.appendChild(grid);
+    var loading = document.createElement("div");
+    loading.className = "profile-empty-sub";
+    loading.style.padding = "24px";
+    loading.textContent = "불러오는 중...";
+    profileBodyEl.appendChild(loading);
+
+    discoverProfilePhotos().then(function (photos) {
+      // 로딩 중 다른 탭으로 넘어갔으면 렌더링하지 않음
+      if (currentGalleryTab !== requestedTab || currentGalleryTab !== "profile") return;
+
+      if (!photos.length) {
+        renderEmptyState("프로필 사진이 없어요.", "지금까지 사용했던 프로필 사진을\n모아보고, 간편하게 관리하세요.");
+        return;
+      }
+
+      var grid = document.createElement("div");
+      grid.className = "profile-grid";
+
+      photos.forEach(function (src, i) {
+        var item = document.createElement("div");
+        item.className = "profile-item";
+
+        var img = document.createElement("img");
+        img.src = src;
+        img.alt = "프로필 사진 " + (i + 1);
+        img.loading = "lazy";
+        img.onerror = function () { item.remove(); };
+        item.appendChild(img);
+
+        var dl = document.createElement("a");
+        dl.className = "profile-download";
+        dl.href = src;
+        dl.download = fileNameFromPath(src);
+        dl.title = "다운로드";
+        dl.innerHTML = downloadIconSvg();
+        item.appendChild(dl);
+
+        grid.appendChild(item);
+      });
+
+      profileBodyEl.innerHTML = "";
+      profileBodyEl.appendChild(grid);
+    });
   }
 
   // 대화 데이터 전체에서 사진/동영상 또는 음성메시지를 최신순으로 모음
