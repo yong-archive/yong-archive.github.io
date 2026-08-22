@@ -14,6 +14,10 @@
   var searchClear = document.getElementById("searchClear");
   var searchResultsEl = document.getElementById("searchResults");
 
+  var menuToggle = document.getElementById("menuToggle");
+  var profileOverlay = document.getElementById("profileOverlay");
+  var profileClose = document.getElementById("profileClose");
+
   var landingEl = document.getElementById("landing");
   var landingCta = document.getElementById("landingCta");
   var landingDdayNum = document.getElementById("landingDdayNum");
@@ -30,6 +34,16 @@
 
   var PEER_NAME = "용뚠,";
   var PEER_INITIAL = "용";
+
+  // 삼선 메뉴 > 프로필 사진첩에 보여줄 사진 목록.
+  // (채팅에 쓰이는 assets/profile.jpg와는 별개로, 지금까지 올라온 프로필 사진들을
+  // profile_1, profile_2 ... 순서로 profile/ 폴더에 누적 보관합니다.
+  // 새 사진을 추가하면 이 배열 끝에 파일명만 추가하면 됩니다.)
+  var PROFILE_PHOTOS = [
+    "profile/profile_1.jpg",
+    "profile/profile_2.png",
+    "profile/profile_3.png"
+  ];
 
   var WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
   var currentMonthKey = null;
@@ -173,11 +187,17 @@
     var av = document.createElement("div");
     av.className = "avatar";
     var img = document.createElement("img");
-    img.src = "assets/profile.jpg";
     img.alt = "";
+    // jpg, png 둘 다 인식되도록: png를 먼저 시도하고 실패하면 jpg로 재시도
+    img.src = "assets/profile.png";
     img.onerror = function () {
-      img.style.display = "none";
-      fb.style.display = "flex";
+      if (img.dataset.triedJpg !== "1") {
+        img.dataset.triedJpg = "1";
+        img.src = "assets/profile.jpg";
+      } else {
+        img.style.display = "none";
+        fb.style.display = "flex";
+      }
     };
     var fb = document.createElement("div");
     fb.className = "fallback";
@@ -503,6 +523,239 @@
     if (e.key === "Escape" && !searchOverlay.hidden) closeSearch();
   });
 
+  /* ================= profile / media / voice overlay ================= */
+
+  var profileTabsEl = document.getElementById("profileTabs");
+  var profileBodyEl = document.getElementById("profileBody");
+  var currentGalleryTab = "profile";
+
+  function downloadIconSvg() {
+    return '<svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  function emptyIconSvg() {
+    return '<svg viewBox="0 0 24 24" fill="none">' +
+      '<circle cx="9" cy="8.5" r="1.4" fill="#d8dbde"/>' +
+      '<path d="M4 17l6-7 4 4.5 2-2.3 4 4.8" stroke="#d8dbde" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>';
+  }
+
+  function fileNameFromPath(path) {
+    var parts = path.split("/");
+    return parts[parts.length - 1];
+  }
+
+  function renderEmptyState(title, sub) {
+    profileBodyEl.innerHTML = "";
+    var wrap = document.createElement("div");
+    wrap.className = "profile-empty";
+
+    var icon = document.createElement("div");
+    icon.className = "profile-empty-icon";
+    icon.innerHTML = emptyIconSvg();
+    wrap.appendChild(icon);
+
+    var titleEl = document.createElement("div");
+    titleEl.className = "profile-empty-title";
+    titleEl.textContent = title;
+    wrap.appendChild(titleEl);
+
+    var subEl = document.createElement("div");
+    subEl.className = "profile-empty-sub";
+    subEl.textContent = sub;
+    wrap.appendChild(subEl);
+
+    profileBodyEl.appendChild(wrap);
+  }
+
+  // 프로필 탭: PROFILE_PHOTOS 배열의 사진들
+  function renderProfileTab() {
+    if (!PROFILE_PHOTOS.length) {
+      renderEmptyState("프로필 사진이 없어요.", "지금까지 사용했던 프로필 사진을\n모아보고, 간편하게 관리하세요.");
+      return;
+    }
+
+    var grid = document.createElement("div");
+    grid.className = "profile-grid";
+
+    PROFILE_PHOTOS.forEach(function (src, i) {
+      var item = document.createElement("div");
+      item.className = "profile-item";
+
+      var img = document.createElement("img");
+      img.src = src;
+      img.alt = "프로필 사진 " + (i + 1);
+      img.loading = "lazy";
+      img.onerror = function () { item.remove(); };
+      item.appendChild(img);
+
+      var dl = document.createElement("a");
+      dl.className = "profile-download";
+      dl.href = src;
+      dl.download = fileNameFromPath(src);
+      dl.title = "다운로드";
+      dl.innerHTML = downloadIconSvg();
+      item.appendChild(dl);
+
+      grid.appendChild(item);
+    });
+
+    profileBodyEl.innerHTML = "";
+    profileBodyEl.appendChild(grid);
+  }
+
+  // 대화 데이터 전체에서 사진/동영상 또는 음성메시지를 최신순으로 모음
+  function collectMediaByType(types) {
+    var list = [];
+    for (var mi = ARCHIVE_MONTHS.length - 1; mi >= 0; mi--) {
+      var mk = ARCHIVE_MONTHS[mi];
+      var msgs = ARCHIVE_DATA[mk] || [];
+      for (var i = msgs.length - 1; i >= 0; i--) {
+        var m = msgs[i];
+        if (types.indexOf(m.type) !== -1 && m.url) {
+          list.push(m);
+        }
+      }
+    }
+    return list;
+  }
+
+  // 사진/동영상 탭
+  function renderMediaTab() {
+    var items = collectMediaByType(["photo", "video"]);
+
+    if (!items.length) {
+      renderEmptyState("사진, 동영상이 없어요.", "채팅방에서 주고 받은 사진과 동영상을\n모아보고, 간편하게 관리하세요.");
+      return;
+    }
+
+    var grid = document.createElement("div");
+    grid.className = "profile-grid";
+
+    items.forEach(function (m) {
+      var item = document.createElement("div");
+      item.className = "profile-item" + (m.type === "video" ? " is-video" : "");
+
+      var media;
+      if (m.type === "video") {
+        media = document.createElement("video");
+        media.src = m.url;
+        media.preload = "metadata";
+        media.muted = true;
+      } else {
+        media = document.createElement("img");
+        media.src = m.url;
+        media.loading = "lazy";
+      }
+      media.onerror = function () { item.remove(); };
+      item.appendChild(media);
+
+      var dl = document.createElement("a");
+      dl.className = "profile-download";
+      dl.href = m.url;
+      dl.download = fileNameFromPath(m.url);
+      dl.title = "다운로드";
+      dl.innerHTML = downloadIconSvg();
+      item.appendChild(dl);
+
+      grid.appendChild(item);
+    });
+
+    profileBodyEl.innerHTML = "";
+    profileBodyEl.appendChild(grid);
+  }
+
+  // 음성메시지 탭
+  function renderVoiceTab() {
+    var items = collectMediaByType(["voice"]);
+
+    if (!items.length) {
+      renderEmptyState("음성메시지가 없어요.", "채팅방에서 주고 받은 음성메시지를\n모아보고, 간편하게 관리하세요.");
+      return;
+    }
+
+    var list = document.createElement("div");
+    list.className = "voice-list";
+
+    items.forEach(function (m) {
+      var row = document.createElement("div");
+      row.className = "voice-row";
+
+      var icon = document.createElement("div");
+      icon.className = "voice-row-icon";
+      icon.textContent = "▶";
+      row.appendChild(icon);
+
+      var main = document.createElement("div");
+      main.className = "voice-row-main";
+
+      var dateEl = document.createElement("div");
+      dateEl.className = "voice-row-date";
+      dateEl.textContent = formatDateShort(m.d) + "  " + formatTime(m.t);
+      main.appendChild(dateEl);
+
+      var audio = document.createElement("audio");
+      audio.src = m.url;
+      audio.controls = true;
+      audio.preload = "none";
+      audio.onerror = function () { row.remove(); };
+      main.appendChild(audio);
+
+      row.appendChild(main);
+
+      var dl = document.createElement("a");
+      dl.className = "voice-row-download";
+      dl.href = m.url;
+      dl.download = fileNameFromPath(m.url);
+      dl.title = "다운로드";
+      dl.innerHTML = downloadIconSvg();
+      row.appendChild(dl);
+
+      list.appendChild(row);
+    });
+
+    profileBodyEl.innerHTML = "";
+    profileBodyEl.appendChild(list);
+  }
+
+  function renderGalleryTab(tab) {
+    currentGalleryTab = tab;
+    var tabs = profileTabsEl.querySelectorAll(".profile-tab");
+    tabs.forEach(function (t) {
+      t.classList.toggle("active", t.dataset.tab === tab);
+    });
+
+    if (tab === "profile") renderProfileTab();
+    else if (tab === "media") renderMediaTab();
+    else if (tab === "voice") renderVoiceTab();
+  }
+
+  function openProfileGallery() {
+    profileOverlay.hidden = false;
+    renderGalleryTab(currentGalleryTab);
+  }
+
+  function closeProfileGallery() {
+    profileOverlay.hidden = true;
+  }
+
+  if (profileTabsEl) {
+    profileTabsEl.addEventListener("click", function (e) {
+      var btn = e.target.closest(".profile-tab");
+      if (!btn) return;
+      renderGalleryTab(btn.dataset.tab);
+    });
+  }
+  if (menuToggle) {
+    menuToggle.addEventListener("click", openProfileGallery);
+  }
+  if (profileClose) {
+    profileClose.addEventListener("click", closeProfileGallery);
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !profileOverlay.hidden) closeProfileGallery();
+  });
+
   /* ================= password gate ================= */
 
   function initPasswordGate() {
@@ -558,14 +811,28 @@
     landingSub.textContent = LANDING_SUBTITLE;
     landingDdayNum.textContent = "+" + calcDaysTogether(LANDING_START_DATE);
 
+    // jpg, png 둘 다 인식되도록: 각각 png를 먼저 시도하고 실패하면 jpg로 재시도
     landingBgImg.onerror = function () {
-      landingBgImg.classList.add("load-error");
+      if (landingBgImg.dataset.triedJpg !== "1") {
+        landingBgImg.dataset.triedJpg = "1";
+        landingBgImg.src = "assets/landing-bg.jpg";
+      } else {
+        landingBgImg.classList.add("load-error");
+      }
     };
+    landingBgImg.src = "assets/landing-bg.png";
+
     landingAvatarImg.onerror = function () {
-      landingAvatarImg.classList.add("load-error");
-      landingAvatarFallback.style.display = "flex";
-      landingAvatarFallback.textContent = PEER_INITIAL;
+      if (landingAvatarImg.dataset.triedJpg !== "1") {
+        landingAvatarImg.dataset.triedJpg = "1";
+        landingAvatarImg.src = "assets/profile.jpg";
+      } else {
+        landingAvatarImg.classList.add("load-error");
+        landingAvatarFallback.style.display = "flex";
+        landingAvatarFallback.textContent = PEER_INITIAL;
+      }
     };
+    landingAvatarImg.src = "assets/profile.png";
 
     landingCta.addEventListener("click", function () {
       landingEl.classList.add("hidden");

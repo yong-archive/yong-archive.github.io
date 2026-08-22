@@ -59,7 +59,7 @@
       </div>
       <div class="icons">
         <button id="searchToggle" title="검색"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-        <button title="메뉴"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button id="menuToggle" title="메뉴"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       </div>
     </div>
     <div class="nav-strip">
@@ -86,6 +86,20 @@
       </button>
     </div>
     <div class="search-results" id="searchResults"></div>
+  </div>
+
+  <div class="profile-overlay" id="profileOverlay" hidden>
+    <div class="profile-header">
+      <button class="search-back" id="profileClose" title="닫기">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="profile-tabs" id="profileTabs">
+      <button class="profile-tab active" data-tab="profile">프로필</button>
+      <button class="profile-tab" data-tab="media">사진/동영상</button>
+      <button class="profile-tab" data-tab="voice">음성메시지</button>
+    </div>
+    <div class="profile-body" id="profileBody"></div>
   </div>
 
 </div>
