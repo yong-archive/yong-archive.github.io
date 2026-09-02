@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>용줄메모 · Archive</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.css" />
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="peer">
+        <h1>용줄메모</h1>
+      </div>
+      <div class="icons">
+        <button class="menu-btn" id="searchToggle" title="검색">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="menu-btn" id="menuToggle" title="월별 이동">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="search-bar" id="searchBar">
+      <svg viewBox="0 0 24 24" fill="none" class="search-bar-icon"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <input type="text" id="searchInput" placeholder="메모 내용 검색" autocomplete="off">
+      <button class="search-clear" id="searchClear" title="지우기">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <nav class="months" id="months" aria-label="년/월 선택">
+      <div class="picker-section">
+        <div class="picker-label">년도</div>
+        <div class="years-view" id="yearsView"></div>
+      </div>
+      <div class="picker-section picker-section-months" id="monthsOfYearView" hidden>
+        <div class="picker-label" id="yearBackLabel">년도</div>
+        <div class="myview-list" id="monthOfYearList"></div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="month-nav">
+    <button class="month-nav-btn" id="prevMonth" title="이전 달">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="month-label" id="monthLabel"></div>
+    <button class="month-nav-btn" id="nextMonth" title="다음 달">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div class="search-status" id="searchStatus"></div>
+
+  <main class="feed" id="feed">
+    <div class="feed-inner" id="feedInner"></div>
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

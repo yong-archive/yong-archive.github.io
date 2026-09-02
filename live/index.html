@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar · Live Archive</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --page-bg:#ffffff;
+    --card-bg:#ffffff;
+    --ink:#161513;
+    --sub:#a3a19b;
+    --line:#e7e5e0;
+    --accent:#e24b4a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  a{text-decoration:none;color:inherit;}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    background:var(--page-bg);
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px 20px;
+  }
+  .app{
+    width:100%;
+    max-width:380px;
+    height:676px;
+    max-height:calc(100vh - 96px);
+    max-height:calc(100dvh - 96px);
+    background:var(--card-bg);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 12px rgba(0,0,0,.12);
+    border:0.5px solid #dedcd6;
+    display:flex;
+    flex-direction:column;
+  }
+  .content{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    margin:auto 0;
+    max-height:100%;
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(0,0,0,.18) transparent;
+    padding:44px 20px 28px;
+  }
+  .content::-webkit-scrollbar{width:6px;}
+  .content::-webkit-scrollbar-track{background:transparent;}
+  .content::-webkit-scrollbar-thumb{background:#fff;border:1px solid rgba(0,0,0,.15);background-clip:padding-box;border-radius:999px;}
+  .content::-webkit-scrollbar-thumb:hover{background:#fff;border-color:rgba(0,0,0,.28);}
+
+  .header{ text-align:center; margin-bottom:34px; }
+  .back{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:12px;color:var(--sub);margin-bottom:22px;
+    text-align:left;width:100%;
+  }
+  .back svg{flex-shrink:0;}
+  .onair{
+    display:inline-flex; align-items:center; gap:6px;
+    background:#FCEBEB;
+    padding:4px 10px 4px 8px;
+    border-radius:20px;
+    margin-bottom:12px;
+  }
+  .onair .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    display:inline-block;
+    animation:blink 1.4s ease-in-out infinite;
+  }
+  .onair span.txt{
+    font-size:10.5px; font-weight:700; letter-spacing:1.2px; color:#A32D2D;
+  }
+  .title{ font-size:20px; font-weight:700; color:#0e0d0c; }
+  .desc{
+    font-size:12px; color:var(--sub); margin-top:8px;
+    line-height:1.6;
+  }
+
+  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+  .live-list{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .live-item{
+    position:relative;
+    display:block;
+    height:172px;
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .live-item:active{ transform:scale(.98); }
+  .live-item::before{
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(to bottom, rgba(0,0,0,.10) 0px, rgba(0,0,0,.10) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+    z-index:2;
+  }
+  .live-video{
+    position:absolute; inset:0; z-index:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    background:#000;
+  }
+  .screen-ig{ background:linear-gradient(135deg,#f58529,#dd2a7b 45%,#8134af 75%,#515bd4); }
+  .screen-yt{ background:linear-gradient(135deg,#e2453f,#7a1414); }
+  .screen-dy{ background:linear-gradient(135deg,#173534,#050505); }
+  .screen-bb{ background:linear-gradient(135deg,#ffb0c4,#ff5b7a); }
+  .screen-rd{ background:linear-gradient(135deg,#6a8caf,#1b3a57); }
+
+  .live-flag{
+    position:absolute; top:10px; left:10px; z-index:3;
+    display:flex; align-items:center; gap:4px;
+    background:rgba(226,75,74,.92);
+    padding:3px 8px 3px 6px;
+    border-radius:20px;
+  }
+  .live-flag .dot{
+    width:5px;height:5px;border-radius:50%;
+    background:#fff;
+    animation:blink 1.3s ease-in-out infinite;
+  }
+  .live-flag .txt{ font-size:9px; font-weight:700; color:#fff; letter-spacing:.04em; }
+
+  .view-count{
+    position:absolute; top:10px; right:10px; z-index:3;
+    display:flex; align-items:center; gap:3px;
+    background:rgba(0,0,0,.35);
+    padding:3px 8px;
+    border-radius:20px;
+  }
+  .view-count i{ font-size:11px; color:#fff; }
+  .view-count span{ font-size:10px; font-weight:600; color:#fff; }
+
+  .live-icon{
+    position:absolute; z-index:1;
+    top:50%; left:50%; transform:translate(-50%,-58%);
+  }
+  .live-icon i{ font-size:34px; color:rgba(255,255,255,.5); }
+
+  .live-scrim{
+    position:absolute; left:0; right:0; bottom:0; z-index:3;
+    padding:22px 12px 10px;
+    background:linear-gradient(to top, rgba(0,0,0,.62), transparent);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .live-name{
+    display:flex; align-items:center; gap:6px;
+    font-size:14px; font-weight:700; color:#fff;
+  }
+  .live-name i{ font-size:15px; }
+  .live-sub{ font-size:10.5px; color:rgba(255,255,255,.8); }
+
+  @media (max-width:480px){
+    body{ padding:0; }
+    .app{
+      max-width:100%;
+      width:100%;
+      height:100vh;
+      height:100dvh;
+      max-height:none;
+      border-radius:0;
+      border:none;
+      box-shadow:none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+<div class="content">
+
+  <div class="header">
+    <a class="back" href="../">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      처음으로
+    </a>
+    <div class="onair"><span class="dot"></span><span class="txt">ON AIR</span></div>
+    <div class="title">Live Archive</div>
+    <div class="desc">다시보고 싶은 순간들,<br>여기서 만나요.</div>
+  </div>
+
+  <nav class="live-list">
+    <a class="live-item screen-ig" href="./archive_instagram.html">
+      <video class="live-video" muted autoplay loop playsinline preload="metadata" poster="https://drive.google.com/thumbnail?id=1-gMKAfr7wUNkcqZtmQzuw4p8rjgkIc6Q&sz=w480-h480"><source src="https://drive.google.com/uc?export=download&id=1-gMKAfr7wUNkcqZtmQzuw4p8rjgkIc6Q" type="video/mp4"></video>
+      <span class="live-flag"><span class="dot"></span><span class="txt">LIVE</span></span>
+      <span class="view-count"><i class="ti ti-eye" aria-hidden="true"></i><span>38</span></span>
+      <span class="live-icon"><i class="ti ti-brand-instagram" aria-hidden="true"></i></span>
+      <span class="live-scrim">
+        <span class="live-name"><i class="ti ti-brand-instagram" aria-hidden="true"></i>Instagram</span>
+        <span class="live-sub">38 live</span>
+      </span>
+    </a>
+
+    <a class="live-item screen-rd" href="./archive_radio.html">
+      <video class="live-video" muted autoplay loop playsinline preload="metadata" poster="https://drive.google.com/thumbnail?id=1E0EIugEyNP_HFXqMHXwYtbiw8i8ikiGQ&sz=w480-h480"><source src="https://drive.google.com/uc?export=download&id=1E0EIugEyNP_HFXqMHXwYtbiw8i8ikiGQ" type="video/mp4"></video>
+      <span class="view-count"><i class="ti ti-eye" aria-hidden="true"></i><span>45</span></span>
+      <span class="live-icon"><i class="ti ti-radio" aria-hidden="true"></i></span>
+      <span class="live-scrim">
+        <span class="live-name"><i class="ti ti-radio" aria-hidden="true"></i>Radio</span>
+        <span class="live-sub">45 live</span>
+      </span>
+    </a>
+
+    <a class="live-item screen-dy" href="./archive_douyin.html">
+      <video class="live-video" muted autoplay loop playsinline preload="metadata" poster="https://drive.google.com/thumbnail?id=1COmyNrd7Y3lHOoGoAxdIkS78UmuNB2H_&sz=w480-h480"><source src="https://drive.google.com/uc?export=download&id=1COmyNrd7Y3lHOoGoAxdIkS78UmuNB2H_" type="video/mp4"></video>
+      <span class="view-count"><i class="ti ti-eye" aria-hidden="true"></i><span>2</span></span>
+      <span class="live-icon"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></span>
+      <span class="live-scrim">
+        <span class="live-name"><i class="ti ti-brand-tiktok" aria-hidden="true"></i>Douyin</span>
+        <span class="live-sub">2 live</span>
+      </span>
+    </a>
+
+    <a class="live-item screen-yt" href="./archive_youtube.html">
+      <video class="live-video" muted autoplay loop playsinline preload="metadata" poster="https://drive.google.com/thumbnail?id=1rYlnNOONgLRCDu6dPdyv_CM4rbaBKO-R&sz=w480-h480"><source src="https://drive.google.com/uc?export=download&id=1rYlnNOONgLRCDu6dPdyv_CM4rbaBKO-R" type="video/mp4"></video>
+      <span class="view-count"><i class="ti ti-eye" aria-hidden="true"></i><span>2</span></span>
+      <span class="live-icon"><i class="ti ti-brand-youtube" aria-hidden="true"></i></span>
+      <span class="live-scrim">
+        <span class="live-name"><i class="ti ti-brand-youtube" aria-hidden="true"></i>YouTube</span>
+        <span class="live-sub">2 live</span>
+      </span>
+    </a>
+
+    <a class="live-item screen-bb" href="./archive_bubble.html">
+      <video class="live-video" muted autoplay loop playsinline preload="metadata" poster="https://drive.google.com/thumbnail?id=1uNtaXfkWdQ5sgkgsNFzPF98E4aIdxbN6&sz=w480-h480"><source src="https://drive.google.com/uc?export=download&id=1uNtaXfkWdQ5sgkgsNFzPF98E4aIdxbN6" type="video/mp4"></video>
+      <span class="view-count"><i class="ti ti-eye" aria-hidden="true"></i><span>6</span></span>
+      <span class="live-icon"><i class="ti ti-messages" aria-hidden="true"></i></span>
+      <span class="live-scrim">
+        <span class="live-name"><i class="ti ti-messages" aria-hidden="true"></i>Bubble</span>
+        <span class="live-sub">6 live</span>
+      </span>
+    </a>
+  </nav>
+
+</div>
+</div>
+
+</body>
+</html>

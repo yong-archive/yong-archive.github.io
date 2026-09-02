@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Archive</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --ink:#161513;
+    --sub:#a3a19b;
+    --sub2:#8a887f;
+    --line:#eeece7;
+    --card-w:170px;
+    --card-gap:56px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  html{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.18) transparent;}
+  html::-webkit-scrollbar{width:6px;}
+  html::-webkit-scrollbar-track{background:transparent;}
+  html::-webkit-scrollbar-thumb{background:#fff;border:1px solid rgba(0,0,0,.15);background-clip:padding-box;border-radius:999px;}
+  html::-webkit-scrollbar-thumb:hover{background:#fff;border-color:rgba(0,0,0,.28);}
+  a{text-decoration:none;color:inherit;}
+  body{
+    font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;
+    background:#ffffff;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    min-height:100dvh;
+  }
+
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:88px 32px 60px;
+  }
+
+  .hero{text-align:center;margin-bottom:64px;}
+  .label{
+    font-size:11px;font-weight:700;letter-spacing:.14em;
+    color:var(--sub);text-transform:uppercase;margin-bottom:14px;
+  }
+  .title{font-weight:700;font-size:30px;color:var(--ink);line-height:1.3;}
+  .sub{font-size:13px;color:var(--sub2);margin-top:12px;line-height:1.6;}
+
+  .folders{
+    display:grid;
+    grid-template-columns:repeat(var(--cols, 2), var(--card-w));
+    justify-content:center;
+    gap:var(--card-gap);
+  }
+
+  .folder-card{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:var(--card-w);
+  }
+
+  .folder-tab{
+    align-self:flex-start;
+    width:46%;height:22px;
+    margin-left:0;
+    border-radius:0 10px 0 0;
+    position:relative;
+    z-index:2;
+  }
+  .folder-body{
+    width:100%;height:104px;
+    margin-top:-2px;
+    border-radius:0 16px 16px 16px;
+    transition:transform .2s ease;
+  }
+  .folder-card:hover .folder-body{transform:translateY(-3px);}
+
+  .f-name{font-weight:700;font-size:15px;color:var(--ink);margin-top:16px;}
+  .f-desc{font-size:11.5px;color:var(--sub);margin-top:3px;}
+
+  /* Message folder palette */
+  .msg .folder-tab{background:#f9b98e;}
+  .msg .folder-body{background:#fdece1;}
+
+  /* SNS folder palette */
+  .sns .folder-tab{background:#c9b8ec;}
+  .sns .folder-body{background:#ece5fa;}
+
+  /* Schedule folder palette */
+  .sch .folder-tab{background:#8ecdc0;}
+  .sch .folder-body{background:#e1f5f0;}
+
+  /* Fan Chant folder palette */
+  .fc .folder-tab{background:#f2a0bd;}
+  .fc .folder-body{background:#fde7ee;}
+
+  /* Live folder palette */
+  .live .folder-tab{background:#f6d16a;}
+  .live .folder-body{background:#fdf3d9;}
+
+  /* Wiki(알쓸용잡) folder palette */
+  .wiki .folder-tab{background:#7fa4d9;}
+  .wiki .folder-body{background:#e4edf9;}
+
+  footer{
+    text-align:center;
+    margin-top:72px;
+    font-size:11px;
+    color:var(--sub);
+    letter-spacing:.03em;
+  }
+
+  @media (max-width:480px){
+    .wrap{padding:64px 20px 40px;}
+    .title{font-size:24px;}
+    :root{--card-w:130px; --card-gap:32px;}
+    .folders{grid-template-columns:repeat(2, var(--card-w));}
+    .folder-body{height:82px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="label">EVERY MOMENT, SAVED</div>
+    <div class="title">SOLAR ARCHIVE</div>
+    <div class="sub">지금까지 모아온 기록들을 폴더별로 정리했어요</div>
+  </div>
+
+  <div class="folders">
+
+    <a class="folder-card sch" href="https://yong-schedule.github.io/">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">Schedule</div>
+      <div class="f-desc">스케줄 아카이브</div>
+    </a>
+
+    <a class="folder-card sns" href="./sns/">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">SNS</div>
+      <div class="f-desc">SNS 아카이브</div>
+    </a>
+
+    <a class="folder-card live" href="./live/">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">Live</div>
+      <div class="f-desc">라이브 아카이브</div>
+    </a>
+
+    <a class="folder-card msg" href="./message/">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">Message</div>
+      <div class="f-desc">메시지 아카이브</div>
+    </a>
+
+    <a class="folder-card fc" href="https://yong-schedule.github.io/fanchant/">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">Fan Chant</div>
+      <div class="f-desc">응원법 아카이브</div>
+    </a>
+
+    <a class="folder-card wiki" href="https://yong-schedule.github.io/wiki">
+      <div class="folder-tab"></div>
+      <div class="folder-body"></div>
+      <div class="f-name">알쓸용잡</div>
+      <div class="f-desc">김용선 잡학사전</div>
+    </a>
+
+  </div>
+
+  <footer>yong-archive · since 2026</footer>
+
+</div>
+
+<script>
+(function(){
+  var container = document.querySelector('.folders');
+  if(!container) return;
+  var n = container.children.length;
+  if(n < 1) return;
+  var maxCols = 4;
+  var rows = Math.ceil(n / maxCols);
+  var cols = Math.ceil(n / rows);
+  container.style.setProperty('--cols', cols);
+})();
+</script>
+
+</body>
+</html>

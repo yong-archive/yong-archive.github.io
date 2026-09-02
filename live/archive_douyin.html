@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar · Douyin Live</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/variable/pretendardvariable.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --page-bg:#ffffff;
+    --card-bg:#ffffff;
+    --ink:#161513;
+    --sub:#a3a19b;
+    --line:#e7e5e0;
+    --accent:#e24b4a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  a{text-decoration:none;color:inherit;}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI","Malgun Gothic",system-ui,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    background:var(--page-bg);
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px 20px;
+  }
+  .app{
+    width:100%;
+    max-width:380px;
+    height:676px;
+    max-height:calc(100vh - 96px);
+    max-height:calc(100dvh - 96px);
+    background:var(--card-bg);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 12px rgba(0,0,0,.12);
+    border:0.5px solid #dedcd6;
+    display:flex;
+    flex-direction:column;
+  }
+  .scroll{
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-height:100%;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(0,0,0,.18) transparent;
+  }
+  .scroll::-webkit-scrollbar{width:6px;}
+  .scroll::-webkit-scrollbar-track{background:transparent;}
+  .scroll::-webkit-scrollbar-thumb{background:#fff;border:1px solid rgba(0,0,0,.15);background-clip:padding-box;border-radius:999px;}
+
+  .hero{ padding:32px 24px 20px; }
+  .back{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:12px;color:var(--sub);margin-bottom:18px;
+  }
+  .back svg{flex-shrink:0;}
+  .hero-top{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .hero-icon{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .hero-icon i{ font-size:16px; }
+  .hero-title{ font-size:18px; font-weight:500; }
+  .hero-count{ font-size:12px; color:var(--sub); margin-top:2px; }
+
+  .section-divider{ height:1px; margin:14px 24px 0; background:var(--line); }
+
+  .list{
+    padding:8px 20px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .episode{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 8px;
+    border-radius:12px;
+    text-decoration:none;
+    color:inherit;
+    transition:background .15s ease;
+    position:relative;
+  }
+  .episode:hover{ background:#f3f1ec; }
+  .episode:active{ transform:scale(.98); }
+
+  .thumb{
+    flex-shrink:0;
+    width:56px;height:56px;
+    border-radius:8px;
+    background:#eeece7 center/cover no-repeat;
+    position:relative;
+    overflow:hidden;
+  }
+  .thumb .dl-hint{
+    position:absolute; bottom:3px; right:3px;
+    width:16px;height:16px;border-radius:50%;
+    background:rgba(0,0,0,.55);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .thumb .dl-hint i{ font-size:10px; color:#fff; }
+
+  .ep-body{ flex:1; min-width:0; }
+  .ep-date{ font-size:14px; font-weight:500; }
+  .ep-meta{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .ep-filename{
+    font-size:11px;
+    color:var(--sub);
+    margin-top:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .chevron{ flex-shrink:0; color:var(--sub); }
+
+  .group-divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:18px 8px 8px 16px;
+  }
+  .group-divider:first-child{ margin-top:4px; }
+  .group-divider .group-name{
+    flex-shrink:0;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--sub);
+    letter-spacing:.02em;
+  }
+  .group-divider .group-line{
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .empty{ padding:40px 24px; text-align:center; font-size:13px; color:var(--sub); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="scroll">
+
+    <div class="hero">
+      <a class="back" href="./index.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Live로
+      </a>
+      <div class="hero-top">
+        <div class="hero-icon" style="background:#D3D1C7;"><i class="ti ti-brand-tiktok" style="color:#2C2C2A;" aria-hidden="true"></i></div>
+        <div>
+          <div class="hero-title">Douyin Live</div>
+        </div>
+      </div>
+      <div class="hero-count">총 2개 회차</div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <nav class="list">
+
+      <a class="episode" href="https://drive.google.com/uc?export=download&id=1COmyNrd7Y3lHOoGoAxdIkS78UmuNB2H_" target="_blank" rel="noopener">
+        <div class="thumb" style="background-image:url('https://drive.google.com/thumbnail?id=1COmyNrd7Y3lHOoGoAxdIkS78UmuNB2H_&sz=w200-h200');">
+          <span class="dl-hint"><i class="ti ti-download" aria-hidden="true"></i></span>
+        </div>
+        <div class="ep-body">
+          <div class="ep-date">2026.03.21</div>
+          <div class="ep-meta">16:27 방송 · 20:01</div>
+          <div class="ep-filename">260321 더우인 라이브.mp4</div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="episode" href="https://drive.google.com/uc?export=download&id=1hN8nIgWtesedJOhtMItUx88hjflUvYal" target="_blank" rel="noopener">
+        <div class="thumb" style="background-image:url('https://drive.google.com/thumbnail?id=1hN8nIgWtesedJOhtMItUx88hjflUvYal&sz=w200-h200');">
+          <span class="dl-hint"><i class="ti ti-download" aria-hidden="true"></i></span>
+        </div>
+        <div class="ep-body">
+          <div class="ep-date">2026.03.12</div>
+          <div class="ep-meta">16:28 방송 · 25:13</div>
+          <div class="ep-filename">260312 더우인 라이브.mp4</div>
+        </div>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </nav>
+
+  </div>
+
+</div>
+
+</body>
+</html>
