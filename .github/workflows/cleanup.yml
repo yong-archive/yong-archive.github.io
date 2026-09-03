@@ -1,0 +1,53 @@
+name: Cleanup runs and deployments
+
+on:
+  schedule:
+    - cron: '0 18 * * 0'   # 매주 일요일 UTC 18시 = 한국시간 월요일 03시
+  workflow_dispatch: {}     # Actions 탭에서 수동으로도 실행 가능
+
+permissions:
+  actions: write
+  deployments: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old workflow runs (keep latest 3)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REPO="${{ github.repository }}"
+          KEEP=3
+          echo "워크플로우별로 최신 $KEEP개만 남기고 삭제합니다."
+
+          gh api "repos/$REPO/actions/workflows" --paginate -q '.workflows[].id' | while read -r WF_ID; do
+            IDS=$(gh api "repos/$REPO/actions/workflows/$WF_ID/runs" --paginate -q '.workflow_runs[] | select(.status=="completed") | .id')
+            COUNT=$(echo "$IDS" | grep -c . || true)
+            if [ "$COUNT" -le "$KEEP" ]; then
+              continue
+            fi
+            echo "$IDS" | tail -n +$((KEEP + 1)) | while read -r RUN_ID; do
+              echo "삭제: run $RUN_ID"
+              gh api -X DELETE "repos/$REPO/actions/runs/$RUN_ID" || true
+            done
+          done
+
+      - name: Delete old deployments (keep latest 3)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REPO="${{ github.repository }}"
+          KEEP=3
+          IDS=$(gh api "repos/$REPO/deployments" --paginate -q '.[].id')
+          COUNT=$(echo "$IDS" | grep -c . || true)
+          if [ "$COUNT" -le "$KEEP" ]; then
+            echo "삭제할 deployment 없음."
+            exit 0
+          fi
+          echo "$IDS" | tail -n +$((KEEP + 1)) | while read -r DEP_ID; do
+            echo "삭제: deployment $DEP_ID"
+            gh api -X POST "repos/$REPO/deployments/$DEP_ID/statuses" -f state=inactive >/dev/null 2>&1 || true
+            gh api -X DELETE "repos/$REPO/deployments/$DEP_ID" || true
+          done
