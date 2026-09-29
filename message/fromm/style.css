@@ -120,22 +120,58 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+.years {
+  display: flex;
+  gap: 20px;
+  padding: 0 16px;
+}
+.year-pill {
+  flex: none;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a3a8ad;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 3px 1px 6px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  font-variant-numeric: tabular-nums;
+}
+.year-pill:hover { color: #4a4a4a; }
+.year-pill.active {
+  color: #1c1c1e;
+  font-weight: 800;
+  border-bottom-color: var(--accent);
+}
+
 .months {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   overflow-x: auto;
-  padding: 0 12px 10px;
+  padding: 4px 12px 8px;
   scrollbar-width: none;
 }
+/* 기본: 연도만 보이고, 연도를 누르면(.open) 월/날짜 칸이 펼쳐짐 */
+.nav-strip:not(.open) .months,
+.nav-strip:not(.open) .days { display: none; }
+.nav-strip.open .years { padding-bottom: 0; }
 .months::-webkit-scrollbar { display: none; }
 .month-pill {
-  flex-shrink: 0;
+  flex: 1 1 0;
+  min-width: 30px;
+  max-width: 54px;
+  text-align: center;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 600;
   color: #6b7075;
   background: #f1f2f3;
   border: none;
-  padding: 6px 11px;
+  padding: 5px 0;
+  white-space: nowrap;
   border-radius: 999px;
   cursor: pointer;
   transition: all 0.15s ease;

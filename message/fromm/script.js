@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var navStripEl = document.querySelector(".nav-strip");
+  var yearsEl = document.getElementById("years");
   var monthsEl = document.getElementById("months");
   var daysEl = document.getElementById("days");
   var chatEl = document.getElementById("chat");
@@ -46,6 +48,7 @@
 
   var WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
   var currentMonthKey = null;
+  var currentYear = null;
 
   /* ================= utils ================= */
 
@@ -99,12 +102,69 @@
 
   /* ================= month / day nav ================= */
 
-  function buildMonthPills() {
-    var frag = document.createDocumentFragment();
+  function getYears() {
+    var years = [];
     ARCHIVE_MONTHS.forEach(function (key) {
+      var y = key.split("-")[0];
+      if (years.indexOf(y) === -1) years.push(y);
+    });
+    return years;
+  }
+
+  function monthsOfYear(year) {
+    return ARCHIVE_MONTHS.filter(function (key) {
+      return key.split("-")[0] === year;
+    });
+  }
+
+  // 연도 버튼 (한 번만 생성). 누르면 그 해의 가장 최근 달로 이동
+  function buildYearPills() {
+    var frag = document.createDocumentFragment();
+    getYears().forEach(function (year) {
+      var pill = document.createElement("button");
+      pill.className = "year-pill";
+      pill.textContent = year;
+      pill.dataset.year = year;
+      pill.addEventListener("click", function () {
+        var isOpen = navStripEl.classList.contains("open");
+        if (year === currentYear) {
+          // 같은 연도를 다시 누르면 월/날짜 칸 접기·펼치기
+          setNavOpen(!isOpen);
+          return;
+        }
+        var list = monthsOfYear(year);
+        if (list.length) selectMonth(list[list.length - 1], true);
+        setNavOpen(true);
+      });
+      frag.appendChild(pill);
+    });
+    yearsEl.appendChild(frag);
+  }
+
+  // 월/날짜 선택칸 열기·닫기 (연도만 보이는 게 기본)
+  function setNavOpen(open) {
+    navStripEl.classList.toggle("open", open);
+    if (open) {
+      // 펼쳐진 뒤 선택된 월/날짜 버튼이 화면 안에 오도록
+      var m = monthsEl.querySelector(".month-pill.active");
+      var d = daysEl.querySelector(".day-pill.active");
+      if (m) m.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+      if (d) d.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+    }
+  }
+
+  // 선택된 연도의 월 버튼만 다시 그림 (최대 12개)
+  function renderMonthPills(year) {
+    currentYear = year;
+    yearsEl.querySelectorAll(".year-pill").forEach(function (p) {
+      p.classList.toggle("active", p.dataset.year === year);
+    });
+    monthsEl.innerHTML = "";
+    var frag = document.createDocumentFragment();
+    monthsOfYear(year).forEach(function (key) {
       var pill = document.createElement("button");
       pill.className = "month-pill";
-      pill.textContent = formatMonthLabel(key);
+      pill.textContent = parseInt(key.split("-")[1], 10) + "월";
       pill.dataset.month = key;
       pill.addEventListener("click", function () {
         selectMonth(key, true);
@@ -115,6 +175,8 @@
   }
 
   function setActivePill(key) {
+    var year = key.split("-")[0];
+    if (year !== currentYear) renderMonthPills(year);
     var pills = monthsEl.querySelectorAll(".month-pill");
     pills.forEach(function (p) {
       var active = p.dataset.month === key;
@@ -920,10 +982,12 @@
     document.title = PEER_NAME + " · FROMM Archive";
     initPasswordGate();
     initLanding();
-    buildMonthPills();
+    buildYearPills();
     buildSearchIndex();
-    var first = ARCHIVE_MONTHS[0];
-    selectMonth(first, false);
+    // 처음엔 가장 최근 달의 마지막 날짜로 열기
+    var latest = ARCHIVE_MONTHS[ARCHIVE_MONTHS.length - 1];
+    var latestDays = getDayOrder(latest);
+    selectMonth(latest, false, latestDays[latestDays.length - 1]);
     emojify(document.body); // pwGate 잠금 아이콘, landing 화면 등 정적 텍스트의 이모지 처리
   }
 
